@@ -6,7 +6,7 @@ from rich.progress import Progress, BarColumn, TaskID
 
 
 class DownloadStatsProgress:
-    """Class that keeps track of download failures and reasons"""
+    """记录下载失败和失败原因的类"""
 
     def __init__(self):
         self.progress = Progress("[progress.description]{task.description}",
@@ -19,19 +19,19 @@ class DownloadStatsProgress:
         self.failed_files = 0
 
     async def get_progress(self) -> Panel:
-        """Returns the progress bar"""
-        return Panel(self.progress_group, title="Download Failures", border_style="green", padding=(1, 1))
+        """返回进度条"""
+        return Panel(self.progress_group, title="下载失败", border_style="green", padding=(1, 1))
 
     async def update_total(self, total: int) -> None:
-        """Updates the total number of files to be downloaded"""
+        """更新需要下载的文件总数"""
         for key in self.failure_types:
             self.progress.update(self.failure_types[key], total=total)
 
     async def add_failure(self, failure_type: [str, int]) -> None:
-        """Adds a failed file to the progress bar"""
+        """向进度条添加一个下载失败的文件"""
         self.failed_files += 1
         if isinstance(failure_type, int):
-            failure_type = str(failure_type) + " HTTP Status"
+            failure_type = str(failure_type) + " HTTP 状态"
 
         if failure_type in self.failure_types:
             self.progress.advance(self.failure_types[failure_type], 1)
@@ -40,7 +40,7 @@ class DownloadStatsProgress:
         await self.update_total(self.failed_files)
 
     async def return_totals(self) -> Dict:
-        """Returns the total number of failed files"""
+        """返回下载失败的文件总数"""
         failures = {}
         for key, value in self.failure_types.items():
             failures[key] = self.progress.tasks[value].completed
@@ -48,7 +48,7 @@ class DownloadStatsProgress:
 
 
 class ScrapeStatsProgress:
-    """Class that keeps track of scraping failures and reasons"""
+    """记录抓取失败和失败原因的类"""
 
     def __init__(self):
         self.progress = Progress("[progress.description]{task.description}",
@@ -61,19 +61,19 @@ class ScrapeStatsProgress:
         self.failed_files = 0
 
     async def get_progress(self) -> Panel:
-        """Returns the progress bar"""
-        return Panel(self.progress_group, title="Scrape Failures", border_style="green", padding=(1, 1))
+        """返回进度条"""
+        return Panel(self.progress_group, title="抓取失败", border_style="green", padding=(1, 1))
 
     async def update_total(self, total: int) -> None:
-        """Updates the total number of sites to be scraped"""
+        """更新需要抓取的站点总数"""
         for key in self.failure_types:
             self.progress.update(self.failure_types[key], total=total)
 
     async def add_failure(self, failure_type: [str, int]) -> None:
-        """Adds a failed site to the progress bar"""
+        """向进度条添加一个抓取失败的站点"""
         self.failed_files += 1
         if isinstance(failure_type, int):
-            failure_type = str(failure_type) + " HTTP Status"
+            failure_type = str(failure_type) + " HTTP 状态"
 
         if failure_type in self.failure_types:
             self.progress.advance(self.failure_types[failure_type], 1)
@@ -82,7 +82,7 @@ class ScrapeStatsProgress:
         await self.update_total(self.failed_files)
 
     async def return_totals(self) -> Dict:
-        """Returns the total number of failed sites and reasons"""
+        """返回抓取失败的站点总数和失败原因"""
         failures = {}
         for key, value in self.failure_types.items():
             failures[key] = self.progress.tasks[value].completed
