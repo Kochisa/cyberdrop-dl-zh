@@ -23,42 +23,42 @@ if TYPE_CHECKING:
 
 
 def program_ui(manager: Manager):
-    """Program UI"""
+    """程序界面"""
     while True:
         console.clear()
-        console.print(f"[bold]Cyberdrop Downloader (V{str(__version__)})[/bold]")
-        console.print(f"[bold]Current Config:[/bold] {manager.config_manager.loaded_config}")
+        console.print(f"[bold]Cyberdrop 下载器 (V{str(__version__)})[/bold]")
+        console.print(f"[bold]当前配置:[/bold] {manager.config_manager.loaded_config}")
         
-        #vi_mode = manager.config_manager.settings_data['General']['input_file'] if not manager.args_manager.vi_mode else manager.args_manager.vi_mode
+        # vi_mode = manager.config_manager.settings_data['General']['input_file'] if not manager.args_manager.vi_mode else manager.args_manager.vi_mode
             
         action = main_prompt(manager)
 
-        # Download
+        # 下载
         if action == 1:
             break
 
-        # Download (All Configs)
+        # 下载 (所有配置)
         if action == 2:
             manager.args_manager.all_configs = True
             break
 
-        # Retry Failed Downloads
+        # 重试失败的下载
         elif action == 3:
             manager.args_manager.retry = True
             break
             
-        # Sort All Configs
+        # 对所有配置进行排序
         elif action == 4:
             manager.args_manager.sort_all_configs = True
             manager.args_manager.all_configs = True
             break
 
-        # Edit URLs
+        # 编辑URLs
         elif action == 5:
             input_file = manager.config_manager.settings_data['Files']['input_file'] if not manager.args_manager.input_file else manager.args_manager.input_file
             edit_urls_prompt(input_file, manager.vi_mode)
 
-        # Select Config
+        # 选择配置
         elif action == 6:
             configs = manager.config_manager.get_configs()
             selected_config = select_config_prompt(manager, configs)
@@ -66,17 +66,17 @@ def program_ui(manager: Manager):
 
         elif action == 7:
             console.clear()
-            console.print("Editing Input / Output File Paths")
+            console.print("编辑输入/输出文件路径")
             input_file = inquirer.filepath(
-                message="Enter the input file path:",
+                message="输入文件路径:",
                 default=str(manager.config_manager.settings_data['Files']['input_file']),
-                validate=PathValidator(is_file=True, message="Input is not a file"),
+                validate=PathValidator(is_file=True, message="输入不是文件"),
                 vi_mode=manager.vi_mode,
             ).execute()
             download_folder = inquirer.text(
-                message="Enter the download folder path:",
+                message="下载文件夹路径:",
                 default=str(manager.config_manager.settings_data['Files']['download_folder']),
-                validate=PathValidator(is_dir=True, message="Input is not a directory"),
+                validate=PathValidator(is_dir=True, message="输入不是文件夹"),
                 vi_mode=manager.vi_mode,
             ).execute()
 
@@ -84,33 +84,33 @@ def program_ui(manager: Manager):
             manager.config_manager.settings_data['Files']['download_folder'] = Path(download_folder)
             manager.config_manager.write_updated_settings_config()
 
-        # Manage Configs
+        # 管理配置
         elif action == 8:
             while True:
                 console.clear()
-                console.print("[bold]Manage Configs[/bold]")
-                console.print(f"[bold]Current Config:[/bold] {manager.config_manager.loaded_config}")
+                console.print("[bold]管理配置[/bold]")
+                console.print(f"[bold]当前配置:[/bold] {manager.config_manager.loaded_config}")
 
                 action = manage_configs_prompt(manager)
 
-                # Change Default Config
+                # 更改默认配置
                 if action == 1:
                     configs = manager.config_manager.get_configs()
                     selected_config = select_config_prompt(manager, configs)
                     manager.config_manager.change_default_config(selected_config)
 
-                # Create A Config
+                # 创建配置
                 elif action == 2:
                     create_new_config_prompt(manager)
 
-                # Delete A Config
+                # 删除配置
                 elif action == 3:
                     configs = manager.config_manager.get_configs()
                     if len(configs) != 1:
                         selected_config = select_config_prompt(manager, configs)
                         if selected_config == manager.config_manager.loaded_config:
                             inquirer.confirm(
-                                message="You cannot delete the currently active config, press enter to continue.",
+                                message="无法删除当前活动配置，请按回车继续。",
                                 default=False,
                                 vi_mode=manager.vi_mode,
                             ).execute()
@@ -118,35 +118,35 @@ def program_ui(manager: Manager):
                         manager.config_manager.delete_config(selected_config)
                     else:
                         inquirer.confirm(
-                            message="There is only one config, press enter to continue.",
+                            message="只有一个配置，请按回车继续。",
                             default=False,
                             vi_mode=manager.vi_mode,
                         ).execute()
 
-                # Edit Config
+                # 编辑配置
                 elif action == 4:
                     edit_config_values_prompt(manager)
 
-                # Edit Authentication Values
+                # 编辑认证值
                 elif action == 5:
                     edit_authentication_values_prompt(manager)
 
-                # Edit Global Settings
+                # 编辑全局设置
                 elif action == 6:
                     edit_global_settings_prompt(manager)
 
-                # Done
+                # 完成
                 elif action == 7:
                     break
 
-        # Import Cyberdrop_V4 Items
+        # 导入 Cyberdrop_V4 项目
         elif action == 9:
             import_cyberdrop_v4_items_prompt(manager)
 
-        # Donate
+        # 捐赠
         elif action == 10:
             donations_prompt(manager)
 
-        # Exit
+        # 退出
         elif action == 11:
             exit(0)
