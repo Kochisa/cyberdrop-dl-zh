@@ -62,13 +62,13 @@ class ScrapingProgress:
             self.progress.update(task_id, visible=True)
 
         if len(self.invisible_tasks) > 0:
-            self.overflow.update(self.overflow_task_id, description=self.overflow_str.format(color=self.color, number=len(self.invisible_tasks)), visible=True)
+            self.overflow.update(self.overflow_task_id, description=self.overflow_str.format(color=self.color, number=len(self.invisible_tasks), type_str=self.type_str), visible=True)
         else:
             self.overflow.update(self.overflow_task_id, visible=False)
 
         queue_length = await self.get_queue_length()
         if queue_length > 0:
-            self.queue.update(self.queue_task_id, description=self.queue_str.format(color=self.color, number=queue_length), visible=True)
+            self.queue.update(self.queue_task_id, description=self.queue_str.format(color=self.color, number=queue_length, type_str=self.type_str), visible=True)
         else:
             self.queue.update(self.queue_task_id, visible=False)
 
