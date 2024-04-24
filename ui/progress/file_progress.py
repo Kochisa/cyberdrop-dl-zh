@@ -10,12 +10,12 @@ if TYPE_CHECKING:
 
 
 async def adjust_title(s: str, length: int = 40, placeholder: str = "...") -> str:
-    """Collapse and truncate or pad the given string to fit in the given length"""
+    """折叠、截断或填充给定的字符串，以适应给定的长度"""
     return f"{s[:length - len(placeholder)]}{placeholder}" if len(s) >= length else s.ljust(length)
 
 
 class FileProgress:
-    """Class that manages the download progress of individual files"""
+    """管理单个文件下载进度的类"""
     def __init__(self, visible_tasks_limit: int, manager: 'Manager'):
         self.manager = manager
 
@@ -34,10 +34,10 @@ class FileProgress:
         self.progress_group = Group(self.progress, self.overflow, self.queue)
 
         self.color = "plum3"
-        self.type_str = "Files"
+        self.type_str = "文件"
         self.progress_str = "[{color}]{description}"
-        self.overflow_str = "[{color}]... And {number} Other {type_str}"
-        self.queue_str = "[{color}]... And {number} {type_str} In Download Queue"
+        self.overflow_str = "[{color}]... 和其他 {type_str} 数量: {number}"
+        self.queue_str = "[{color}]... 和下载队列中的 {type_str} 数量: {number}"
         self.overflow_task_id = self.overflow.add_task(self.overflow_str.format(color=self.color, number=0, type_str=self.type_str), visible=False)
         self.queue_task_id = self.queue.add_task(self.queue_str.format(color=self.color, number=0, type_str=self.type_str), visible=False)
 
@@ -48,11 +48,11 @@ class FileProgress:
         self.tasks_visibility_limit = visible_tasks_limit
 
     async def get_progress(self) -> Panel:
-        """Returns the progress bar"""
-        return Panel(self.progress_group, title="Downloads", border_style="green", padding=(1, 1))
+        """返回进度条"""
+        return Panel(self.progress_group, title="下载", border_style="green", padding=(1, 1))
 
     async def get_queue_length(self) -> int:
-        """Returns the number of tasks in the downloader queue"""
+        """返回下载队列中的任务数量"""
         total = 0
 
         for scraper in self.manager.scrape_mapper.existing_crawlers.values():
@@ -61,7 +61,7 @@ class FileProgress:
         return total
 
     async def redraw(self) -> None:
-        """Redraws the progress bar"""
+        """重新绘制进度条"""
         while len(self.visible_tasks) > self.tasks_visibility_limit:
             task_id = self.visible_tasks.pop(0)
             self.invisible_tasks.append(task_id)
@@ -83,7 +83,7 @@ class FileProgress:
             self.queue.update(self.queue_task_id, visible=False)
 
     async def add_task(self, file: str, expected_size: Optional[int]) -> TaskID:
-        """Adds a new task to the progress bar"""
+        """向进度条添加新任务"""
         description = file.split('/')[-1]
         description = description.encode("ascii", "ignore").decode().strip()
         description = await adjust_title(description)
@@ -98,7 +98,7 @@ class FileProgress:
         return task_id
 
     async def remove_file(self, task_id: TaskID) -> None:
-        """Removes the given task from the progress bar"""
+        """从进度条中移除给定的任务"""
         if task_id in self.visible_tasks:
             self.visible_tasks.remove(task_id)
             self.progress.update(task_id, visible=False)
@@ -107,11 +107,11 @@ class FileProgress:
         elif task_id == self.overflow_task_id:
             self.overflow.update(task_id, visible=False)
         else:
-            raise ValueError("Task ID not found")
+            raise ValueError("找不到任务ID")
         await self.redraw()
 
     async def mark_task_completed(self, task_id: TaskID) -> None:
-        """Marks the given task as completed"""
+        """将给定的任务标记为已完成"""
         self.progress.update(task_id, visible=False)
         if task_id in self.visible_tasks:
             self.visible_tasks.remove(task_id)
@@ -121,7 +121,7 @@ class FileProgress:
         self.completed_tasks.append(task_id)
 
     async def advance_file(self, task_id: TaskID, amount: int) -> None:
-        """Advances the progress of the given task by the given amount"""
+        """以给定的数量推进给定任务的进度"""
         if task_id in self.uninitiated_tasks:
             self.uninitiated_tasks.remove(task_id)
             self.invisible_tasks.append(task_id)
@@ -129,7 +129,7 @@ class FileProgress:
         self.progress.advance(task_id, amount)
 
     async def update_file_length(self, task_id: TaskID, total: int) -> None:
-        """Updates the total number of bytes to be downloaded for the given task"""
+        """更新给定任务的待下载字节总数"""
         if task_id in self.invisible_tasks:
             self.progress.update(task_id, total=total, visible=False)
         elif task_id in self.visible_tasks:
