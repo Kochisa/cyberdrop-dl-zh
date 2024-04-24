@@ -29,7 +29,7 @@ def program_ui(manager: Manager):
         console.print(f"[bold]Cyberdrop 下载器 (V{str(__version__)})[/bold]")
         console.print(f"[bold]当前配置:[/bold] {manager.config_manager.loaded_config}")
         
-        # vi_mode = manager.config_manager.settings_data['General']['input_file'] if not manager.args_manager.vi_mode else manager.args_manager.vi_mode
+        #vi_mode = manager.config_manager.settings_data['General']['input_file'] if not manager.args_manager.vi_mode else manager.args_manager.vi_mode
             
         action = main_prompt(manager)
 
