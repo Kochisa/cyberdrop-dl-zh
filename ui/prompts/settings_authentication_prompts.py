@@ -38,23 +38,23 @@ def edit_authentication_values_prompt(manager: Manager) -> None:
             ], long_instruction="箭头键: 导航 | 回车: 选择",
         ).execute()
 
-        # Edit DDOS-Guard Cookies
+        # 编辑 DDOS-Guard Cookies
         if action == 1:
             edit_ddos_guard_cookies_prompt(manager)
 
-        # Edit Forums
+        # 编辑论坛身份验证值
         if action == 2:
             edit_forum_authentication_values_prompt(manager)
 
-        # Edit JDownloader
+        # 编辑 JDownloader 身份验证值
         elif action == 3:
             edit_jdownloader_authentication_values_prompt(auth)
 
-        # Edit Reddit
+        # 编辑 Reddit 身份验证值
         elif action == 4:
             edit_reddit_authentication_values_prompt(auth)
 
-        # Edit GoFile API Key
+        # 编辑 GoFile API 密钥
         elif action == 5:
             console.clear()
             gofile_api_key = inquirer.text(
@@ -64,7 +64,7 @@ def edit_authentication_values_prompt(manager: Manager) -> None:
             ).execute()
             auth["GoFile"]["gofile_api_key"] = gofile_api_key
 
-        # Edit Imgur Client ID
+        # 编辑 Imgur 客户端 ID
         elif action == 6:
             console.clear()
             imgur_client_id = inquirer.text(
@@ -75,7 +75,7 @@ def edit_authentication_values_prompt(manager: Manager) -> None:
             ).execute()
             auth["Imgur"]["imgur_client_id"] = imgur_client_id
 
-        # Edit PixelDrain API Key
+        # 编辑 PixelDrain API 密钥
         elif action == 7:
             console.clear()
             pixeldrain_api_key = inquirer.text(
@@ -85,30 +85,30 @@ def edit_authentication_values_prompt(manager: Manager) -> None:
             ).execute()
             auth["PixelDrain"]["pixeldrain_api_key"] = pixeldrain_api_key
 
-        # Done
+        # 完成
         elif action == 8:
             manager.config_manager.write_updated_authentication_config()
             return
 
 
 def edit_ddos_guard_cookies_prompt(manager: Manager) -> None:
-    """编辑论坛身份验证值"""
+    """编辑 DDOS-Guard Cookie 值"""
     while True:
         console.clear()
-        console.print("Editing DDOS-Guard Cookie Values")
+        console.print("编辑 DDOS-Guard Cookie 值")
         action = inquirer.select(
-            message="What would you like to do?",
+            message="您想做什么？",
             choices=[
-                Choice(1, "Browser Cookie Extraction"),
-                Choice(2, "Enter Cookie Values Manually"),
-                Choice(3, "Done"),
-            ], long_instruction="ARROW KEYS: Navigate | ENTER: Select"
+                Choice(1, "浏览器 Cookie 提取"),
+                Choice(2, "手动输入 Cookie 值"),
+                Choice(3, "完成"),
+            ], long_instruction="箭头键: 导航 | 回车: 选择",
         ).execute()
 
-        # Browser Cookie Extraction
+        # 浏览器 Cookie 提取
         if action == 1:
             action = inquirer.select(
-                message="Which browser should we load cookies from?",
+                message="您希望从哪个浏览器加载 Cookie？",
                 choices=[
                     Choice("chrome", "Chrome"),
                     Choice("firefox", "FireFox"),
@@ -116,15 +116,15 @@ def edit_ddos_guard_cookies_prompt(manager: Manager) -> None:
                     Choice("safari", "Safari"),
                     Choice("opera", "Opera"),
                     Choice("brave", "Brave"),
-                    Choice(1, "Done"),
-                ], long_instruction="ARROW KEYS: Navigate | ENTER: Select"
+                    Choice(1, "完成"),
+                ], long_instruction="箭头键: 导航 | 回车: 选择",
             ).execute()
 
-            # Done
+            # 完成
             if action == 1:
                 continue
 
-            # Browser Selection
+            # 浏览器选择
             if action == "chrome":
                 get_ddos_guard_cookies(manager, "chrome")
             elif action == "firefox":
@@ -139,75 +139,75 @@ def edit_ddos_guard_cookies_prompt(manager: Manager) -> None:
                 get_ddos_guard_cookies(manager, "brave")
             return
 
-        # Enter Cookie Values Manually
+        # 手动输入 Cookie 值
         elif action == 2:
             bunkr_ddg1 = inquirer.text(
-                message="Enter your DDG1 value for Bunkr:",
+                message="输入 Bunkr 的 DDG1 值：",
                 default=manager.config_manager.authentication_data["DDOS-Guard"]["bunkrr_ddg1"],
             ).execute()
             bunkr_ddg2 = inquirer.text(
-                message="Enter your DDG2 value for Bunkr:",
+                message="输入 Bunkr 的 DDG2 值：",
                 default=manager.config_manager.authentication_data["DDOS-Guard"]["bunkrr_ddg2"],
             ).execute()
             bunkr_ddgid = inquirer.text(
-                message="Enter your DDGID value for Bunkr:",
+                message="输入 Bunkr 的 DDGID 值：",
                 default=manager.config_manager.authentication_data["DDOS-Guard"]["bunkrr_ddgid"],
             ).execute()
 
             coomer_ddg1 = inquirer.text(
-                message="Enter your DDG1 value for Coomer:",
+                message="输入 Coomer 的 DDG1 值：",
                 default=manager.config_manager.authentication_data["DDOS-Guard"]["coomer_ddg1"],
             ).execute()
             kemono_ddg1 = inquirer.text(
-                message="Enter your DDG1 value for Kemono:",
+                message="输入 Kemono 的 DDG1 值：",
                 default=manager.config_manager.authentication_data["DDOS-Guard"]["kemono_ddg1"],
             ).execute()
 
-            manager.config_manager.authentication_data["DDOS-Guard"]["bunkr_ddg1"] = bunkr_ddg1
-            manager.config_manager.authentication_data["DDOS-Guard"]["bunkr_ddg2"] = bunkr_ddg2
-            manager.config_manager.authentication_data["DDOS-Guard"]["bunkr_ddgid"] = bunkr_ddgid
-            manager.config_manager.authentication_data["DDOS-Guard"]["coomer_ddg1"] = coomer_ddg1
-            manager.config_manager.authentication_data["DDOS-Guard"]["kemono_ddg1"] = kemono_ddg1
+             # 将以下密钥信息更新至配置管理器中“DDOS-Guard”部分
+             manager.config_manager.authentication_data["DDOS-Guard"]["bunkr_ddg1"] = bunkr_ddg1
+             manager.config_manager.authentication_data["DDOS-Guard"]["bunkr_ddg2"] = bunkr_ddg2
+             manager.config_manager.authentication_data["DDOS-Guard"]["bunkr_ddgid"] = bunkr_ddgid
+             manager.config_manager.authentication_data["DDOS-Guard"]["coomer_ddg1"] = coomer_ddg1
+             manager.config_manager.authentication_data["DDOS-Guard"]["kemono_ddg1"] = kemono_ddg1
 
-            return
+             # 返回
         elif action == 3:
-            return
+             # 直接返回
 
 
 def edit_forum_authentication_values_prompt(manager: Manager) -> None:
-    """Edit the forum authentication values"""
+    """编辑论坛认证值"""
     while True:
         console.clear()
-        console.print("Editing Forum Authentication Values")
+        console.print("正在编辑论坛认证值")
         action = inquirer.select(
-            message="What would you like to do?",
+            message="您希望执行什么操作？",
             choices=[
-                Choice(1, "Browser Cookie Extraction"),
-                Choice(2, "Enter Cookie Values Manually"),
-                Choice(3, "Done"),
-            ], long_instruction="ARROW KEYS: Navigate | ENTER: Select"
+                Choice(1, "浏览器Cookie提取"),
+                Choice(2, "手动输入Cookie值"),
+                Choice(3, "完成"),
+            ], long_instruction="方向键：导航 | 回车：选择"
         ).execute()
 
-        # Browser Cookie Extraction
+        # 浏览器Cookie提取
         if action == 1:
             action = inquirer.select(
-                message="Which browser should we load cookies from?",
+                message="我们应该从哪个浏览器加载Cookies？",
                 choices=[
                     Choice("chrome", "Chrome"),
-                    Choice("firefox", "FireFox"),
+                    Choice("firefox", "火狐"),
                     Choice("edge", "Edge"),
                     Choice("safari", "Safari"),
-                    Choice("opera", "Opera"),
+                    Choice("opera", "欧朋"),
                     Choice("brave", "Brave"),
-                    Choice(1, "Done"),
-                ], long_instruction="ARROW KEYS: Navigate | ENTER: Select"
+                    Choice(1, "完成"),
+                ], long_instruction="方向键：导航 | 回车：选择"
             ).execute()
-
-            # Done
+             # 完成
             if action == 1:
-                continue
+                继续循环
 
-            # Browser Selection
+            # 浏览器选择
             if action == "chrome":
                 get_forum_cookies(manager, "chrome")
             elif action == "firefox":
@@ -222,71 +222,72 @@ def edit_forum_authentication_values_prompt(manager: Manager) -> None:
                 get_forum_cookies(manager, "brave")
             return
 
-        # Enter Cookie Values Manually
+        # 手动输入Cookie值
         elif action == 2:
             celebforum_username = inquirer.text(
-                message="Enter your CelebForum Username:",
+                message="请输入您的CelebForum用户名:",
                 default=manager.config_manager.authentication_data["Forums"]["celebforum_username"],
             ).execute()
             celebforum_password = inquirer.text(
-                message="Enter your CelebForum Password:",
+                message="请输入您的CelebForum密码:",
                 default=manager.config_manager.authentication_data["Forums"]["celebforum_password"],
             ).execute()
 
             f95zone_username = inquirer.text(
-                message="Enter your F95Zone Username:",
+                message="请输入您的F95Zone用户名:",
                 default=manager.config_manager.authentication_data["Forums"]["f95zone_username"],
             ).execute()
             f95zone_password = inquirer.text(
-                message="Enter your F95Zone Password:",
+                message="请输入您的F95Zone密码:",
                 default=manager.config_manager.authentication_data["Forums"]["f95zone_password"],
             ).execute()
 
             leakedmodels_username = inquirer.text(
-                message="Enter your LeakedModels Username:",
+                message="请输入您的LeakedModels用户名:",
                 default=manager.config_manager.authentication_data["Forums"]["leakedmodels_username"],
             ).execute()
             leakedmodels_password = inquirer.text(
-                message="Enter your LeakedModels Password:",
+                message="请输入您的LeakedModels密码:",
                 default=manager.config_manager.authentication_data["Forums"]["leakedmodels_password"],
             ).execute()
 
             nudostar_username = inquirer.text(
-                message="Enter your NudoStar Username:",
+                message="请输入您的NudoStar用户名:",
                 default=manager.config_manager.authentication_data["Forums"]["nudostar_username"],
             ).execute()
             nudostar_password = inquirer.text(
-                message="Enter your NudoStar Password:",
+                message="请输入您的NudoStar密码:",
                 default=manager.config_manager.authentication_data["Forums"]["nudostar_password"],
             ).execute()
 
             simpcity_username = inquirer.text(
-                message="Enter your SimpCity Username:",
+                message="请输入您的SimpCity用户名:",
                 default=manager.config_manager.authentication_data["Forums"]["simpcity_username"],
             ).execute()
             simpcity_password = inquirer.text(
-                message="Enter your SimpCity Password:",
+                message="请输入您的SimpCity密码:",
                 default=manager.config_manager.authentication_data["Forums"]["simpcity_password"],
             ).execute()
 
             socialmediagirls_username = inquirer.text(
-                message="Enter your SocialMediaGirls Username:",
+                message="请输入您的SocialMediaGirls用户名:",
                 default=manager.config_manager.authentication_data["Forums"]["socialmediagirls_username"],
             ).execute()
             socialmediagirls_password = inquirer.text(
-                message="Enter your SocialMediaGirls Password:",
+                message="请输入您的SocialMediaGirls密码:",
                 default=manager.config_manager.authentication_data["Forums"]["socialmediagirls_password"],
             ).execute()
 
             xbunker_username = inquirer.text(
-                message="Enter your XBunker Username:",
+                message="请输入您的XBunker用户名:",
                 default=manager.config_manager.authentication_data["Forums"]["xbunker_username"],
             ).execute()
             xbunker_password = inquirer.text(
-                message="Enter your XBunker Password:",
+                message="请输入您的XBunker密码:",
                 default=manager.config_manager.authentication_data["Forums"]["xbunker_password"],
             ).execute()
 
+             # 更新配置管理器中的论坛用户名信息
             manager.config_manager.authentication_data["Forums"]["celebforum_username"] = celebforum_username
             manager.config_manager.authentication_data["Forums"]["f95zone_username"] = f95zone_username
             manager.config_manager.authentication_data["Forums"]["leakedmodels_username"] = leakedmodels_username
@@ -295,6 +296,7 @@ def edit_forum_authentication_values_prompt(manager: Manager) -> None:
             manager.config_manager.authentication_data["Forums"]["socialmediagirls_username"] = socialmediagirls_username
             manager.config_manager.authentication_data["Forums"]["xbunker_username"] = xbunker_username
 
+            # 更新配置管理器中的论坛密码信息
             manager.config_manager.authentication_data["Forums"]["celebforum_password"] = celebforum_password
             manager.config_manager.authentication_data["Forums"]["f95zone_password"] = f95zone_password
             manager.config_manager.authentication_data["Forums"]["leakedmodels_password"] = leakedmodels_password
@@ -302,44 +304,49 @@ def edit_forum_authentication_values_prompt(manager: Manager) -> None:
             manager.config_manager.authentication_data["Forums"]["simpcity_password"] = simpcity_password
             manager.config_manager.authentication_data["Forums"]["socialmediagirls_password"] = socialmediagirls_password
             manager.config_manager.authentication_data["Forums"]["xbunker_password"] = xbunker_password
-            return
+
+            # 返回
         elif action == 3:
-            return
+            # 返回
 
-
+# 编辑JDownloader认证值
 def edit_jdownloader_authentication_values_prompt(auth: Dict) -> None:
-    """Edit the JDownloader authentication values"""
     console.clear()
+
+    # 获取用户输入的JDownloader用户名
     jdownloader_username = inquirer.text(
-        message="Enter the JDownloader Username:",
+        message="请输入JDownloader用户名:",
         default=auth["JDownloader"]["jdownloader_username"],
     ).execute()
+
+    # 获取用户输入的JDownloader密码
     jdownloader_password = inquirer.text(
-        message="Enter the JDownloader Password:",
+        message="请输入JDownloader密码:",
         default=auth["JDownloader"]["jdownloader_password"],
     ).execute()
+
+    # 获取用户输入的JDownloader设备名称
     jdownloader_device = inquirer.text(
-        message="Enter the JDownloader Device Name:",
+        message="请输入JDownloader设备名称:",
         default=auth["JDownloader"]["jdownloader_device"],
     ).execute()
 
+    # 更新字典中的JDownloader认证信息
     auth["JDownloader"]["jdownloader_username"] = jdownloader_username
     auth["JDownloader"]["jdownloader_password"] = jdownloader_password
     auth["JDownloader"]["jdownloader_device"] = jdownloader_device
 
 
+# 编辑Reddit认证值
 def edit_reddit_authentication_values_prompt(auth: Dict) -> None:
-    """Edit the reddit authentication values"""
     console.clear()
-    console.print(
-        "You can create a Reddit App to use here: https://www.reddit.com/prefs/apps/"
-    )
+    console.print("您可以在以下地址创建一个Reddit App以供此处使用：https://www.reddit.com/prefs/apps/")
     reddit_secret = inquirer.text(
-        message="Enter the Reddit Secret value:",
+        message="请输入Reddit Secret值:",
         default=auth["Reddit"]["reddit_secret"],
     ).execute()
     reddit_personal_use_script = inquirer.text(
-        message="Enter the Reddit Personal Use Script value:",
+        message="请输入Reddit Personal Use Script值:",
         default=auth["Reddit"]["reddit_personal_use_script"],
     ).execute()
 
