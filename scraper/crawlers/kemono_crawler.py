@@ -14,7 +14,14 @@ from cyberdrop_dl.utils.utilities import get_filename_and_ext, error_handling_wr
 if TYPE_CHECKING:
     from cyberdrop_dl.managers.manager import Manager
 
+class DownloadCounter:
+    def __init__(self):
+        self._count = 0
 
+    def increment(self):
+        self._count += 1
+        return self._count
+    
 class KemonoCrawler(Crawler):
     def __init__(self, manager: Manager):
         super().__init__(manager, "kemono", "Kemono")
@@ -23,6 +30,8 @@ class KemonoCrawler(Crawler):
         self.api_url = URL("https://kemono.su/api/v1")
         self.services = ['patreon', 'fanbox', 'fantia', 'afdian', 'boosty', 'dlsite', 'gumroad', 'subscribestar']
         self.request_limiter = AsyncLimiter(10, 1)
+
+        self.download_counter = DownloadCounter()  # 假设有一个DownloadCounter类负责自增计数
 
         self.cookies_set = False
 
@@ -113,10 +122,20 @@ class KemonoCrawler(Crawler):
             await handle_file(file)
 
     @error_handling_wrapper
+
     async def handle_direct_link(self, scrape_item: ScrapeItem) -> None:
         """Handles a direct link"""
-        filename, ext = await get_filename_and_ext(scrape_item.url.query["f"])
-        await self.handle_file(scrape_item.url, scrape_item, filename, ext)
+        # 1. 获取文件扩展名
+        _, ext = await get_filename_and_ext(scrape_item.url.query["f"])
+
+        # 2. 根据下载开始的先后顺序，生成三位数的数字作为新的文件名
+        download_sequence_number = self.download_counter.increment()  # 假设有一个自增的download_counter属性
+        formatted_sequence_number = f'{download_sequence_number:03}'  # 将数字格式化为三位数，不足位补零
+
+        # 3. 构建新的文件名
+        new_filename = f'{formatted_sequence_number}.{ext}'
+
+        await self.handle_file(scrape_item.url, scrape_item, new_filename, ext)
 
     """~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
