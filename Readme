@@ -1,1 +1,12 @@
-rm -rf
+#下载最新的Cyberdrop-dl
+pip install cyberdrop-dl
+
+#定位python安装位置，然后在python目录下进入Lib\site-packages
+
+#找到cyberdrop_dl文件夹 把里面的文件替换成我的修改代码。
+
+#定位python安装位置，然后在python目录下进入\Scripts
+
+#复制cyberdrop-dl.exe并改名为cddl.exe
+
+#接下来可以直接开启cmd 使用cddl+空格+链接进行下载
